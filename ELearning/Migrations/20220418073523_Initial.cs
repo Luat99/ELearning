@@ -88,19 +88,6 @@ namespace ELearning.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ManageListOfTeacherss",
-                columns: table => new
-                {
-                    ID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DESCRIPTION = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ManageListOfTeacherss", x => x.ID);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "ManageStudentLists",
                 columns: table => new
                 {
@@ -323,9 +310,6 @@ namespace ELearning.Migrations
 
             migrationBuilder.DropTable(
                 name: "ManageLearningOutcomess");
-
-            migrationBuilder.DropTable(
-                name: "ManageListOfTeacherss");
 
             migrationBuilder.DropTable(
                 name: "ManageStudentLists");

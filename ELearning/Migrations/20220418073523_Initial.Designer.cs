@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ELearning.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220413180057_Initial")]
+    [Migration("20220418073523_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -73,23 +73,6 @@ namespace ELearning.Migrations
                     b.HasKey("ID");
 
                     b.ToTable("ManageLearningOutcomess");
-                });
-
-            modelBuilder.Entity("ELearning.Models.ManageListOfTeachers", b =>
-                {
-                    b.Property<Guid>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("DESCRIPTION")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("ID");
-
-                    b.ToTable("ManageListOfTeacherss");
                 });
 
             modelBuilder.Entity("ELearning.Models.ManageStudentList", b =>

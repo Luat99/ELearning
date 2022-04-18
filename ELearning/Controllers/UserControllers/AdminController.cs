@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using ELearning.UserManagement.Admin;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -6,8 +7,7 @@ using System.Text;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using ELearning.UserManagement.Admin;
-
+using Microsoft.AspNetCore.Authorization;
 
 namespace ELearning.Controllers.UserControllers
 {
@@ -106,7 +106,53 @@ namespace ELearning.Controllers.UserControllers
             }
             return Ok(new ResponseAdmin { Status = "Success", Message = "Admin created successfully!" });
         }
-       
+        [HttpPost]
+        [Route("change-password")]
+        public async Task<IActionResult> ChangePassword([FromBody] ChangePassword model)
+        {
+            var user = await _userManager.FindByNameAsync(model.Username);
+            if(user == null)
+                return StatusCode(StatusCodes.Status404NotFound, new ResponseAdmin { Status = "Erro", Message = "User do not" });
+            if(string.Compare(model.NewPassword, model.ConfirmPassword) !=0)
+                return StatusCode(StatusCodes.Status400BadRequest, new ResponseAdmin { Status = "Erro", Message = "The new pass do not" });
+            var result = await _userManager.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
+            if (result.Succeeded)
+            {
+                var errors = new List<string>();
+                foreach (var error in result.Errors)
+                {
+                    errors.Add(error.Description);
+                }
+                return StatusCode(StatusCodes.Status500InternalServerError, new ResponseAdmin { Status = "Erro", Message = string.Join(",",errors)});
+
+
+            }
+            return Ok(new ResponseAdmin { Status = "ss", Message = "dddd" });
+        }
+       // [Authorize(Roles ="Admin")]
+        [HttpPost]
+        [Route("ResetPassword")]
+        public async Task<IActionResult> ResetPasswordAdmin([FromBody] ResetPasswordAdmin model)
+        {
+            var user = await _userManager.FindByNameAsync(model.UserName);
+            if (user == null)
+                return StatusCode(StatusCodes.Status404NotFound, new ResponseAdmin { Status = "Erro", Message = "User do not" });
+            if (string.Compare(model.NewPassword, model.ComfirmNewPassword) != 0)
+                return StatusCode(StatusCodes.Status400BadRequest, new ResponseAdmin { Status = "Erro", Message = "The new pass do not" });
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            var result = await _userManager.ResetPasswordAsync(user, token, model.NewPassword);
+            if(!result.Succeeded)
+            {
+                var errors = new List<string>();
+                foreach (var error in result.Errors)
+                {
+                    errors.Add(error.Description);
+                }
+                return StatusCode(StatusCodes.Status500InternalServerError, new ResponseAdmin { Status = "Erro", Message = string.Join(",", errors) });
+            }
+            return Ok(new ResponseAdmin { Status = "ss", Message = "Pass Succeeded " });
+
+        }
         private JwtSecurityToken GetToken(List<Claim> authClaims)
         {
             var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
@@ -121,5 +167,6 @@ namespace ELearning.Controllers.UserControllers
 
             return token;
         }
+
     }
 }

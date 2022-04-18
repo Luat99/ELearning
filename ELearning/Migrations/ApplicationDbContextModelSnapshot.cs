@@ -73,23 +73,6 @@ namespace ELearning.Migrations
                     b.ToTable("ManageLearningOutcomess");
                 });
 
-            modelBuilder.Entity("ELearning.Models.ManageListOfTeachers", b =>
-                {
-                    b.Property<Guid>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("DESCRIPTION")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("ID");
-
-                    b.ToTable("ManageListOfTeacherss");
-                });
-
             modelBuilder.Entity("ELearning.Models.ManageStudentList", b =>
                 {
                     b.Property<Guid>("ID")

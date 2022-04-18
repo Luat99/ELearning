@@ -35,6 +35,10 @@ builder.Services.AddSwaggerGen(options => {
 
     options.OperationFilter<SecurityRequirementsOperationFilter>();
 });
+builder.Services.Configure<DataProtectionTokenProviderOptions>(options =>
+{
+    options.TokenLifespan = TimeSpan.FromSeconds(2);
+});
 // Adding Authentication
 builder.Services.AddAuthentication(options =>
 {
